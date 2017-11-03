@@ -96,11 +96,13 @@ class Application(Frame):
         self.buttonArray = []
 
         for i in range(9):
-            #self.buttonArray.append(Button(self.main_container, text='*', style="BL.TButton", command=self.selectResponse))
-            self.buttonArray.append(Button(self.main_container, text='*', style="BL.TButton"))
+            self.buttonArray.append(Button(self.main_container, text='-', style="BL.TButton", command=self.selectResponse))
+            #self.buttonArray.append(Button(self.main_container, text='-', style="BL.TButton"))
 
         for i in range(9):
-            self.buttonArray[i].bind(['<Enter>', i], self.enterEvent)
+            self.buttonArray[i].bind('<Enter>', lambda event, idx=i: self.enterEvent(idx))
+            self.buttonArray[i].bind('<Leave>', lambda event, idx=i: self.leaveEvent(idx))
+            #self.buttonArray[i].bind('<FocusIn>', self.inFocus(i))
             #self.buttonArray[i].bind('<FocusOut>', self.outFocus)
 
         '''   
@@ -175,23 +177,30 @@ class Application(Frame):
 
         self.progress_bar.grid(row=12, column=0, columnspan=3, padx=10, pady=5, sticky='NSEW')
 
-    def enterEvent(self, event, i):
+    def inFocus(self, i):
+
+        print 'inFocus'
+        print i
+
+    def enterEvent(self, i):
 
         self.buttonArray[i]['text'] = 'X'
+        self.buttonVar[i].set("A")
 
-    def leaveEvent(self, event):
+    def leaveEvent(self, i):
 
-        for i in range(9):
-            if self.buttonArray[i]['state'] == ACTIVE:
-                self.buttonArray[i]['text'] = ''
+        self.buttonArray[i]['text'] = '-'
+        self.buttonVar[i].set("")
 
     def selectResponse(self):
 
-        # tkMessageBox.showinfo('Responding')
-
         for i in range(9):
-            self.buttonArray[i]['state'] = ACTIVE
-            #if self.buttonArray[i]["state"] == ACTIVE:
+            if self.buttonVar[i].get() == 'A':
+                self.buttonArray[i]['text'] = 'X'
+                self.buttonVar[i].set("")
+
+
+        #if self.buttonArray[i]["state"] == ACTIVE:
             #    print 'active'
             #    self.buttonArray[i]['state'] = DISABLED
 
@@ -203,8 +212,9 @@ class Application(Frame):
 
         for i in range(9):
             self.buttonArray[i]['state'] = NORMAL
-            self.buttonArray[i]['text'] = '*'
+            self.buttonArray[i]['text'] = '-'
 
+        tkMessageBox.showinfo('Game Reset', 'Game Has Been Reset.')
 
     def checkTraining(self):
 
