@@ -13,6 +13,7 @@ from tkFileDialog import askopenfilename
 
 import os
 import shutil
+import random
 import datetime 
 import tkMessageBox
 
@@ -29,7 +30,8 @@ class Application(Frame):
         # Define the source and target folder variables
         
         self.origin = os.getcwd()
-        self.copied = IntVar()
+        self.machineTrained = IntVar()
+        self.winner = IntVar()
         self.copying = 0
         self.source = ""
         self.target = ""
@@ -61,7 +63,7 @@ class Application(Frame):
 
         # Set button styles
         Style().configure("B.TButton", font="Verdana 8", width=10, highlightthickness=4, relief="ridge")
-        Style().configure("BL.TButton", font="Courier 40", width=2, relief="raised")
+        Style().configure("BL.TButton", font="Courier 40 bold", width=2, relief="raised")
 
         # Set check button styles
         Style().configure("B.TCheckbutton", font="Verdana 8")
@@ -96,7 +98,7 @@ class Application(Frame):
         self.buttonArray = []
 
         for i in range(9):
-            self.buttonArray.append(Button(self.main_container, text='-', style="BL.TButton", command=self.selectResponse))
+            self.buttonArray.append(Button(self.main_container, text='-', style="BL.TButton", command=self.markSelection))
             #self.buttonArray.append(Button(self.main_container, text='-', style="BL.TButton"))
 
         for i in range(9):
@@ -177,6 +179,8 @@ class Application(Frame):
 
         self.progress_bar.grid(row=12, column=0, columnspan=3, padx=10, pady=5, sticky='NSEW')
 
+        self.machineTrained.set(0)
+
     def inFocus(self, i):
 
         print 'inFocus'
@@ -184,44 +188,115 @@ class Application(Frame):
 
     def enterEvent(self, i):
 
-        self.buttonArray[i]['text'] = 'X'
-        self.buttonVar[i].set("A")
+        if self.buttonVar[i].get() == 'S':
+            pass
+        else:
+            self.buttonArray[i]['text'] = 'X'
+            self.buttonVar[i].set("A")
+
+        self.buttonVar[i].get()
 
     def leaveEvent(self, i):
 
-        self.buttonArray[i]['text'] = '-'
-        self.buttonVar[i].set("")
+        if self.buttonVar[i].get() == 'S':
+            pass
+        else:
+            self.buttonArray[i]['text'] = '-'
+            self.buttonVar[i].set("")
 
-    def selectResponse(self):
+    def markSelection(self):
 
         for i in range(9):
             if self.buttonVar[i].get() == 'A':
                 self.buttonArray[i]['text'] = 'X'
-                self.buttonVar[i].set("")
+                self.buttonVar[i].set("S")
+
+                self.machineSelection()
+                if self.checkWinner('X'):
+
+                    tkMessageBox.showinfo('You Win!', 'Congratulations, you win!')
 
 
-        #if self.buttonArray[i]["state"] == ACTIVE:
-            #    print 'active'
-            #    self.buttonArray[i]['state'] = DISABLED
+    def machineSelection(self):
 
-        
+        # Get all available selections  
+
+        idx_options = []
+
+        for i in range(9):
+            if self.buttonVar[i].get() == 'S':
+                pass
+            else:
+                idx_options.append(i)
+
+        # Randomly select from available selections if there are more options
+
+        if len(idx_options) > 0:
+            idx_selection = random.choice(idx_options)
+
+            # Set the choice of the computer
+            self.buttonArray[idx_selection]['text'] = 'O'
+            self.buttonVar[idx_selection].set("S")
+
+            if self.checkWinner('O'):
+
+                tkMessageBox.showinfo('Computer Wins!', 'Computer wins!')
+
+
+        else:
+            response = tkMessageBox.askquestion('Tied Game!', 'It"s a tie! Do you want to play again?')
+
+            if response == 'yes':
+                for i in range(9):
+                    self.buttonArray[i]['state'] = NORMAL
+                    self.buttonArray[i]['text'] = '-'
+                    self.buttonVar[i].set("")
+
+    def checkWinner(self, mark):
+
+        if (self.buttonArray[0]['text'] == self.buttonArray[1]['text'] == self.buttonArray[2]['text'] == mark ) or \
+           (self.buttonArray[3]['text'] == self.buttonArray[4]['text'] == self.buttonArray[5]['text'] == mark ) or \
+           (self.buttonArray[6]['text'] == self.buttonArray[7]['text'] == self.buttonArray[8]['text'] == mark ) or \
+           (self.buttonArray[0]['text'] == self.buttonArray[3]['text'] == self.buttonArray[6]['text'] == mark ) or \
+           (self.buttonArray[1]['text'] == self.buttonArray[4]['text'] == self.buttonArray[7]['text'] == mark ) or \
+           (self.buttonArray[2]['text'] == self.buttonArray[5]['text'] == self.buttonArray[8]['text'] == mark ) or \
+           (self.buttonArray[0]['text'] == self.buttonArray[4]['text'] == self.buttonArray[8]['text'] == mark ) or \
+           (self.buttonArray[2]['text'] == self.buttonArray[4]['text'] == self.buttonArray[6]['text'] == mark ):
+            self.winner.set(1)
+            return True
+
+        else:
+            return False
+
+
     def resetButtons(self):
 
         ''' This function will select reset the buttons
         '''
 
-        for i in range(9):
-            self.buttonArray[i]['state'] = NORMAL
-            self.buttonArray[i]['text'] = '-'
+        response = tkMessageBox.askquestion('Game Reset', 'Are you sure you want to reset the game?')
 
-        tkMessageBox.showinfo('Game Reset', 'Game Has Been Reset.')
+        if response == 'yes':
+
+            for i in range(9):
+                self.buttonArray[i]['state'] = NORMAL
+                self.buttonArray[i]['text'] = '-'
+                self.buttonVar[i].set("")
+
+            self.winner.set(0)
+
 
     def checkTraining(self):
 
         response = tkMessageBox.askquestion('Train Machine', 'Are you sure you want to train the machine?')            
 
         if response == 'yes':
-            self.startTraining()
+
+            tkMessageBox.showwarning('Training', 'Training is currently unavailable.')
+            
+            #self.startTraining()
+            #self.machineTrained.set(1)
+
 
     def startTraining(self):
 
