@@ -32,19 +32,6 @@ class Application(Frame):
         self.origin = os.getcwd()
         self.machineTrained = IntVar()
         self.winner = IntVar()
-        self.copying = 0
-        self.source = ""
-        self.target = ""
-        self.script = ""
-        self.allSet = True
-        self.getMatch3 = IntVar()
-        self.getMatch4 = IntVar()
-        self.getMatch5 = IntVar()
-        self.numberA = StringVar()
-        self.numberB = StringVar()
-        self.numberC = StringVar()
-        self.numberD = StringVar()
-        self.numberE = StringVar()
 
         self.buttonVar = []
 
@@ -63,7 +50,7 @@ class Application(Frame):
 
         # Set button styles
         Style().configure("B.TButton", font="Verdana 8", width=10, highlightthickness=4, relief="ridge")
-        Style().configure("BL.TButton", font="Courier 40 bold", width=2, relief="raised")
+        Style().configure("BL.TButton", font="Courier 40 bold", width=2, background="blue", relief="raised")
 
         # Set check button styles
         Style().configure("B.TCheckbutton", font="Verdana 8")
@@ -90,34 +77,20 @@ class Application(Frame):
         self.sep_fv = Separator(self.main_container, orient=VERTICAL)
 
         self.mainLabel = Label(self.main_container, text="TIC-TAC-TOE", style="M.TLabel" )
-        self.subLabelA = Label(self.main_container, text="Play Tic-Tac-Toe against the machine. ", style="S.TLabel" )
-        self.subLabelB = Label(self.main_container, text="Train the machine to make the game more challenging. ", style="S.TLabel" )
+        self.subLabelA = Label(self.main_container, text="Let's play Tic-Tac-Toe!", style="S.TLabel" )
+        self.subLabelB = Label(self.main_container, text="Play against the machine, or train the machine", style="S.TLabel")
+        self.subLabelC = Label(self.main_container, text="to make the game more challenging.", style="S.TLabel")
 
         # Create the button selection widgets
         
         self.buttonArray = []
 
         for i in range(9):
-            self.buttonArray.append(Button(self.main_container, text='-', style="BL.TButton", command=self.markSelection))
-            #self.buttonArray.append(Button(self.main_container, text='-', style="BL.TButton"))
+            self.buttonArray.append(Button(self.main_container, text=' ', style="BL.TButton", command=self.markSelection))
 
         for i in range(9):
             self.buttonArray[i].bind('<Enter>', lambda event, idx=i: self.enterEvent(idx))
             self.buttonArray[i].bind('<Leave>', lambda event, idx=i: self.leaveEvent(idx))
-            #self.buttonArray[i].bind('<FocusIn>', self.inFocus(i))
-            #self.buttonArray[i].bind('<FocusOut>', self.outFocus)
-
-        '''   
-        self.button_1 = Button(self.main_container, text="1", style="BL.TButton", command=self.selectResponse)
-        self.button_2 = Button(self.main_container, text="*", style="BL.TButton", command=self.selectResponse)
-        self.button_3 = Button(self.main_container, text="*", style="BL.TButton", command=self.selectResponse)
-        self.button_4 = Button(self.main_container, text="*", style="BL.TButton", command=self.selectResponse)
-        self.button_5 = Button(self.main_container, text="*", style="BL.TButton", command=self.selectResponse)
-        self.button_6 = Button(self.main_container, text="*", style="BL.TButton", command=self.selectResponse)
-        self.button_7 = Button(self.main_container, text="*", style="BL.TButton", command=self.selectResponse)
-        self.button_8 = Button(self.main_container, text="*", style="BL.TButton", command=self.selectResponse)
-        self.button_9 = Button(self.main_container, text="*", style="BL.TButton", command=self.selectResponse)
-        '''
 
         self.trainMachine = Button(self.main_container, text="TRAIN", style="B.TButton", command=self.checkTraining)
         self.resetGame = Button(self.main_container, text="RESET", style="B.TButton", command=self.resetButtons)
@@ -129,62 +102,41 @@ class Application(Frame):
         self.mainLabel.grid(row=0, column=0, columnspan=3, padx=5, pady=5, sticky='NSEW')
         self.subLabelA.grid(row=1, column=0, columnspan=3, padx=5, pady=0, sticky='NSEW')
         self.subLabelB.grid(row=2, column=0, columnspan=3, padx=5, pady=0, sticky='NSEW')
-        #self.subLabelC.grid(row=3, column=0, columnspan=3, padx=5, pady=0, sticky='NSEW')
+        self.subLabelC.grid(row=3, column=0, columnspan=3, padx=5, pady=0, sticky='NSEW')
 
-        self.sep_ah.grid(row=3, column=0, columnspan=3, padx=5, pady=5, sticky='NSEW')
+        self.sep_ah.grid(row=4, column=0, columnspan=3, padx=5, pady=5, sticky='NSEW')
 
         # Position the first 3 button selection widgets
 
         for i in range(3):
             idx = i
-            self.buttonArray[i].grid(row=4, column=i, padx=10, pady=(5, 10), sticky='NSEW')    
+            self.buttonArray[i].grid(row=5, column=i, padx=10, pady=(5, 10), sticky='NSEW')    
 
-        '''
-        self.button_1.grid(row=4, column=0, padx=10, pady=(5, 10), sticky='NSEW')
-        self.button_2.grid(row=4, column=1, padx=10, pady=(5, 10), sticky='NSEW')
-        self.button_3.grid(row=4, column=2, padx=10, pady=(5, 10), sticky='NSEW')
-        '''
-
-        self.sep_bh.grid(row=5, column=0, columnspan=3, padx=5, pady=5, sticky='NSEW')
+        self.sep_bh.grid(row=6, column=0, columnspan=3, padx=5, pady=5, sticky='NSEW')
 
         for i in range(3):
             idx = i + 3
-            self.buttonArray[idx].grid(row=6, column=i, padx=10, pady=(5, 10), sticky='NSEW')    
+            self.buttonArray[idx].grid(row=7, column=i, padx=10, pady=(5, 10), sticky='NSEW')    
         
-        '''
-        self.button_4.grid(row=6, column=0, padx=10, pady=(5, 10), sticky='NSEW')
-        self.button_5.grid(row=6, column=1, padx=10, pady=(5, 10), sticky='NSEW')
-        self.button_6.grid(row=6, column=2, padx=10, pady=(5, 10), sticky='NSEW')
-        '''
-
-        self.sep_ch.grid(row=7, column=0, columnspan=3, padx=5, pady=5, sticky='NSEW')
+        self.sep_ch.grid(row=8, column=0, columnspan=3, padx=5, pady=5, sticky='NSEW')
 
         for i in range(3):
             idx = i + 6
-            self.buttonArray[idx].grid(row=8, column=i, padx=10, pady=(5, 10), sticky='NSEW')    
+            self.buttonArray[idx].grid(row=9, column=i, padx=10, pady=(5, 10), sticky='NSEW')    
 
-        '''
-        self.button_7.grid(row=8, column=0, padx=10, pady=(5, 10), sticky='NSEW')
-        self.button_8.grid(row=8, column=1, padx=10, pady=(5, 10), sticky='NSEW')
-        self.button_9.grid(row=8, column=2, padx=10, pady=(5, 10), sticky='NSEW')
-        '''
+        self.sep_dh.grid(row=10, column=0, columnspan=3, padx=5, pady=5, sticky='NSEW')
 
-        self.sep_dh.grid(row=9, column=0, columnspan=3, padx=5, pady=5, sticky='NSEW')
+        self.trainMachine.grid(row=11, column=0, padx=10, pady=5, sticky='NSEW')
+        self.resetGame.grid(row=11, column=1, padx=10, pady=5, sticky='NSEW')
+        self.exitGame.grid(row=11, column=2, padx=10, pady=5, sticky='NSEW')
 
-        self.trainMachine.grid(row=10, column=0, padx=10, pady=5, sticky='NSEW')
-        self.resetGame.grid(row=10, column=1, padx=10, pady=5, sticky='NSEW')
-        self.exitGame.grid(row=10, column=2, padx=10, pady=5, sticky='NSEW')
+        self.sep_eh.grid(row=12, column=0, columnspan=3, padx=5, pady=5, sticky='NSEW')
 
-        self.sep_eh.grid(row=11, column=0, columnspan=3, padx=5, pady=5, sticky='NSEW')
-
-        self.progress_bar.grid(row=12, column=0, columnspan=3, padx=10, pady=5, sticky='NSEW')
+        self.progress_bar.grid(row=13, column=0, columnspan=3, padx=10, pady=5, sticky='NSEW')
 
         self.machineTrained.set(0)
+        self.winner.set(0)
 
-    def inFocus(self, i):
-
-        print 'inFocus'
-        print i
 
     def enterEvent(self, i):
 
@@ -201,7 +153,7 @@ class Application(Frame):
         if self.buttonVar[i].get() == 'S':
             pass
         else:
-            self.buttonArray[i]['text'] = '-'
+            self.buttonArray[i]['text'] = ' '
             self.buttonVar[i].set("")
 
     def markSelection(self):
@@ -211,10 +163,13 @@ class Application(Frame):
                 self.buttonArray[i]['text'] = 'X'
                 self.buttonVar[i].set("S")
 
-                self.machineSelection()
                 if self.checkWinner('X'):
 
                     tkMessageBox.showinfo('You Win!', 'Congratulations, you win!')
+
+                else:
+
+                    self.machineSelection()
 
 
     def machineSelection(self):
@@ -249,7 +204,7 @@ class Application(Frame):
             if response == 'yes':
                 for i in range(9):
                     self.buttonArray[i]['state'] = NORMAL
-                    self.buttonArray[i]['text'] = '-'
+                    self.buttonArray[i]['text'] = ' '
                     self.buttonVar[i].set("")
 
     def checkWinner(self, mark):
@@ -273,17 +228,20 @@ class Application(Frame):
 
         ''' This function will select reset the buttons
         '''
+        if self.winner.get() == 0:
 
-        response = tkMessageBox.askquestion('Game Reset', 'Are you sure you want to reset the game?')
+            response = tkMessageBox.askquestion('Game Reset', 'Are you sure you want to reset the game?')
 
-        if response == 'yes':
+            if response == 'no':
+                return
 
-            for i in range(9):
-                self.buttonArray[i]['state'] = NORMAL
-                self.buttonArray[i]['text'] = '-'
-                self.buttonVar[i].set("")
+        for i in range(9):
+            self.buttonArray[i]['state'] = NORMAL
+            self.buttonArray[i]['text'] = ' '
+            self.buttonVar[i].set("")
 
-            self.winner.set(0)
+        self.winner.set(0)
+
 
 
     def checkTraining(self):
@@ -317,13 +275,11 @@ class Application(Frame):
 
 root = Tk()
 root.title("TIC - TAC - TOE")
-#root.minsize(480, 380)
-#root.maxsize(480, 380)
 
 # Set size
 
-wh = 460
-ww = 340
+wh = 480
+ww = 300
 
 #root.resizable(height=False, width=False)
 
