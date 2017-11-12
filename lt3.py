@@ -58,7 +58,7 @@ class Application(Frame):
         Style().configure("L.TListbox", font="Verdana 8", width="40")
         Style().configure("E.TEntrybox", width="10")
 
-        Style().configure("S.TSeparator", borderwidth=3, background="black", relief="flat")
+        Style().configure("S.TSeparator", borderwidth=8, background="black", relief="flat")
         
         Style().configure("O.TLabelframe.Label", font="Verdana 8", foreground="black")
         
@@ -109,33 +109,36 @@ class Application(Frame):
 
         # Position the first 3 button selection widgets
 
-        self.buttonArray[0].grid(row=5, column=0, padx=10, pady=5, sticky='W')
-        self.sep_av.grid(row=5, column=0, padx=10, pady=(5,0), sticky='NS')
-        self.buttonArray[1].grid(row=5, column=0, padx=10, pady=5, sticky='W')
-        self.sep_bv.grid(row=5, column=0, padx=10, pady=(5,0), sticky='NS')
-        self.buttonArray[2].grid(row=5, column=0, padx=10, pady=5, sticky='W')
+        px = 10
+        for i in range(3):
+            idx = i 
+            self.buttonArray[idx].grid(row=5, column=0, padx=(px, 10), pady=10, sticky='W')   
+            px += 100 
 
-        self.sep_bh.grid(row=6, column=0, columnspan=3, padx=5, pady=0, sticky='NSEW')
+        self.sep_av.grid(row=5, column=0, rowspan=1, padx=(96,5), pady=(5,0), sticky='NSW')
+        self.sep_bv.grid(row=5, column=0, rowspan=1, padx=(196,5), pady=(5,0), sticky='NSW')
+
+        self.sep_bh.grid(row=6, column=0, padx=5, pady=0, sticky='NSEW')
 
         px = 10
         for i in range(3):
             idx = i + 3
-            self.buttonArray[idx].grid(row=7, column=0, padx=(px, 10), pady=5, sticky='W')   
+            self.buttonArray[idx].grid(row=7, column=0, padx=(px, 10), pady=10, sticky='W')   
             px += 100 
         
-        self.sep_cv.grid(row=7, column=0, rowspan=1, padx=(98,5), pady=0, sticky='NS')
-        self.sep_dv.grid(row=7, column=0, rowspan=1, padx=(198,5), pady=0, sticky='NS')
+        self.sep_cv.grid(row=7, column=0, rowspan=1, padx=(96,5), pady=0, sticky='NSW')
+        self.sep_dv.grid(row=7, column=0, rowspan=1, padx=(196,5), pady=0, sticky='NSW')
 
-        self.sep_ch.grid(row=8, column=0, columnspan=3, padx=5, pady=0, sticky='NSEW')
+        self.sep_ch.grid(row=8, column=0, padx=5, pady=0, sticky='NSEW')
 
         px = 10
         for i in range(3):
             idx = i + 6
-            self.buttonArray[idx].grid(row=9, column=0, padx=(px, 10), pady=5, sticky='W')   
+            self.buttonArray[idx].grid(row=9, column=0, padx=(px, 10), pady=10, sticky='W')   
             px += 100 
 
-        self.sep_ev.grid(row=9, column=0, rowspan=1, padx=(98,5), pady=(0, 5), sticky='NS')
-        self.sep_fv.grid(row=9, column=0, rowspan=1, padx=(198,5), pady=(0, 5), sticky='NS')
+        self.sep_ev.grid(row=9, column=0, rowspan=1, padx=(96,5), pady=(0, 5), sticky='NSW')
+        self.sep_fv.grid(row=9, column=0, rowspan=1, padx=(196,5), pady=(0, 5), sticky='NSW')
 
         self.sep_dh.grid(row=10, column=0, columnspan=3, padx=5, pady=5, sticky='NSEW')
 
@@ -291,7 +294,7 @@ root.title("TIC - TAC - TOE")
 
 # Set size
 
-wh = 480
+wh = 450
 ww = 300
 
 #root.resizable(height=False, width=False)
