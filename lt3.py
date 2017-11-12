@@ -50,7 +50,7 @@ class Application(Frame):
 
         # Set button styles
         Style().configure("B.TButton", font="Verdana 8", width=10, highlightthickness=4, relief="ridge")
-        Style().configure("BL.TButton", font="Courier 40 bold", width=2, background="blue", relief="raised")
+        Style().configure("BL.TButton", font="Courier 40 bold", width=2, borderwidth="0", relief="flat")
 
         # Set check button styles
         Style().configure("B.TCheckbutton", font="Verdana 8")
@@ -58,23 +58,24 @@ class Application(Frame):
         Style().configure("L.TListbox", font="Verdana 8", width="40")
         Style().configure("E.TEntrybox", width="10")
 
+        Style().configure("S.TSeparator", borderwidth=3, background="black", relief="flat")
         
         Style().configure("O.TLabelframe.Label", font="Verdana 8", foreground="black")
         
         # Create widgets
         self.sep_ah = Separator(self.main_container, orient=HORIZONTAL)
-        self.sep_bh = Separator(self.main_container, orient=HORIZONTAL)
-        self.sep_ch = Separator(self.main_container, orient=HORIZONTAL)
+        self.sep_bh = Separator(self.main_container, style="S.TSeparator", orient=HORIZONTAL)
+        self.sep_ch = Separator(self.main_container, style="S.TSeparator", orient=HORIZONTAL)
         self.sep_dh = Separator(self.main_container, orient=HORIZONTAL)
         self.sep_eh = Separator(self.main_container, orient=HORIZONTAL)
         self.sep_fh = Separator(self.main_container, orient=HORIZONTAL)
         
-        self.sep_av = Separator(self.main_container, orient=VERTICAL)
-        self.sep_bv = Separator(self.main_container, orient=VERTICAL)
-        self.sep_cv = Separator(self.main_container, orient=VERTICAL)
-        self.sep_dv = Separator(self.main_container, orient=VERTICAL)
-        self.sep_ev = Separator(self.main_container, orient=VERTICAL)
-        self.sep_fv = Separator(self.main_container, orient=VERTICAL)
+        self.sep_av = Separator(self.main_container, style="S.TSeparator", orient=VERTICAL)
+        self.sep_bv = Separator(self.main_container, style="S.TSeparator", orient=VERTICAL)
+        self.sep_cv = Separator(self.main_container, style="S.TSeparator", orient=VERTICAL)
+        self.sep_dv = Separator(self.main_container, style="S.TSeparator", orient=VERTICAL)
+        self.sep_ev = Separator(self.main_container, style="S.TSeparator", orient=VERTICAL)
+        self.sep_fv = Separator(self.main_container, style="S.TSeparator", orient=VERTICAL)
 
         self.mainLabel = Label(self.main_container, text="TIC-TAC-TOE", style="M.TLabel" )
         self.subLabelA = Label(self.main_container, text="Let's play Tic-Tac-Toe!", style="S.TLabel" )
@@ -108,27 +109,39 @@ class Application(Frame):
 
         # Position the first 3 button selection widgets
 
-        for i in range(3):
-            idx = i
-            self.buttonArray[i].grid(row=5, column=i, padx=10, pady=(5, 10), sticky='NSEW')    
+        self.buttonArray[0].grid(row=5, column=0, padx=10, pady=5, sticky='W')
+        self.sep_av.grid(row=5, column=0, padx=10, pady=(5,0), sticky='NS')
+        self.buttonArray[1].grid(row=5, column=0, padx=10, pady=5, sticky='W')
+        self.sep_bv.grid(row=5, column=0, padx=10, pady=(5,0), sticky='NS')
+        self.buttonArray[2].grid(row=5, column=0, padx=10, pady=5, sticky='W')
 
-        self.sep_bh.grid(row=6, column=0, columnspan=3, padx=5, pady=5, sticky='NSEW')
+        self.sep_bh.grid(row=6, column=0, columnspan=3, padx=5, pady=0, sticky='NSEW')
 
+        px = 10
         for i in range(3):
             idx = i + 3
-            self.buttonArray[idx].grid(row=7, column=i, padx=10, pady=(5, 10), sticky='NSEW')    
+            self.buttonArray[idx].grid(row=7, column=0, padx=(px, 10), pady=5, sticky='W')   
+            px += 100 
         
-        self.sep_ch.grid(row=8, column=0, columnspan=3, padx=5, pady=5, sticky='NSEW')
+        self.sep_cv.grid(row=7, column=0, rowspan=1, padx=(98,5), pady=0, sticky='NS')
+        self.sep_dv.grid(row=7, column=0, rowspan=1, padx=(198,5), pady=0, sticky='NS')
 
+        self.sep_ch.grid(row=8, column=0, columnspan=3, padx=5, pady=0, sticky='NSEW')
+
+        px = 10
         for i in range(3):
             idx = i + 6
-            self.buttonArray[idx].grid(row=9, column=i, padx=10, pady=(5, 10), sticky='NSEW')    
+            self.buttonArray[idx].grid(row=9, column=0, padx=(px, 10), pady=5, sticky='W')   
+            px += 100 
+
+        self.sep_ev.grid(row=9, column=0, rowspan=1, padx=(98,5), pady=(0, 5), sticky='NS')
+        self.sep_fv.grid(row=9, column=0, rowspan=1, padx=(198,5), pady=(0, 5), sticky='NS')
 
         self.sep_dh.grid(row=10, column=0, columnspan=3, padx=5, pady=5, sticky='NSEW')
 
-        self.trainMachine.grid(row=11, column=0, padx=10, pady=5, sticky='NSEW')
-        self.resetGame.grid(row=11, column=1, padx=10, pady=5, sticky='NSEW')
-        self.exitGame.grid(row=11, column=2, padx=10, pady=5, sticky='NSEW')
+        self.trainMachine.grid(row=11, column=0, padx=10, pady=5, sticky='W')
+        self.resetGame.grid(row=11, column=0, padx=(110,10), pady=5, sticky='W')
+        self.exitGame.grid(row=11, column=0, padx=(210,10), pady=5, sticky='W')
 
         self.sep_eh.grid(row=12, column=0, columnspan=3, padx=5, pady=5, sticky='NSEW')
 
