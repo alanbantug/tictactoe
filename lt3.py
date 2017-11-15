@@ -234,6 +234,12 @@ class Application(Frame):
            (self.buttonArray[0]['text'] == self.buttonArray[4]['text'] == self.buttonArray[8]['text'] == mark ) or \
            (self.buttonArray[2]['text'] == self.buttonArray[4]['text'] == self.buttonArray[6]['text'] == mark ):
             self.winner.set(1)
+
+            # if a winner is found, disable all the buttons
+
+            for i in range(9):
+                self.buttonArray[i]['state'] = DISABLED
+
             return True
 
         else:
