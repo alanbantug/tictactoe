@@ -2,20 +2,19 @@
 
 ### This utility will copy a folder and its contents into a different folder
 ###
-import Tkinter
-from Tkinter import *
+import tkinter
+from tkinter import *
 
-import ttk
-from ttk import *
+from tkinter.ttk import *
+from tkinter import messagebox
 
-from tkFileDialog import askdirectory
-from tkFileDialog import askopenfilename
+from tkinter.filedialog import askdirectory
+from tkinter.filedialog import askopenfilename
 
 import os
 import shutil
 import random
 import datetime 
-import tkMessageBox
 
 from time import time
 import subprocess as sp
