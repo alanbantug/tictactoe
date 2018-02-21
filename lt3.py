@@ -16,7 +16,7 @@ import shutil
 import random
 import datetime 
 
-from time import time
+import time
 import subprocess as sp
 
 class Application(Frame):
@@ -178,9 +178,9 @@ class Application(Frame):
                 self.buttonArray[i]['text'] = 'X'
                 self.buttonVar[i].set("S")
 
-                if self.checkWinner('X'):
+                if self.checkWinner('X', True):
 
-                    tkMessageBox.showinfo('You Win!', 'Congratulations, you win!')
+                    messagebox.showinfo('You Win!', 'Congratulations, you win!')
 
                 else:
 
@@ -208,13 +208,13 @@ class Application(Frame):
             self.buttonArray[idx_selection]['text'] = 'O'
             self.buttonVar[idx_selection].set("S")
 
-            if self.checkWinner('O'):
+            if self.checkWinner('O', True):
 
-                tkMessageBox.showinfo('Computer Wins!', 'Computer wins!')
+                messagebox.showinfo('Computer Wins!', 'Computer wins!')
 
 
         else:
-            response = tkMessageBox.askquestion('Tied Game!', 'It"s a tie! Do you want to play again?')
+            response = messagebox.askquestion('Tied Game!', 'It"s a tie! Do you want to play again?')
 
             if response == 'yes':
                 for i in range(9):
@@ -222,7 +222,7 @@ class Application(Frame):
                     self.buttonArray[i]['text'] = ' '
                     self.buttonVar[i].set("")
 
-    def checkWinner(self, mark):
+    def checkWinner(self, mark, disabl):
 
         if (self.buttonArray[0]['text'] == self.buttonArray[1]['text'] == self.buttonArray[2]['text'] == mark ) or \
            (self.buttonArray[3]['text'] == self.buttonArray[4]['text'] == self.buttonArray[5]['text'] == mark ) or \
@@ -236,8 +236,9 @@ class Application(Frame):
 
             # if a winner is found, disable all the buttons
 
-            for i in range(9):
-                self.buttonArray[i]['state'] = DISABLED
+            if disabl:
+                for i in range(9):
+                    self.buttonArray[i]['state'] = DISABLED
 
             return True
 
@@ -251,7 +252,7 @@ class Application(Frame):
         '''
         if self.winner.get() == 0:
 
-            response = tkMessageBox.askquestion('Game Reset', 'Are you sure you want to reset the game?')
+            response = messagebox.askquestion('Game Reset', 'Are you sure you want to reset the game?')
 
             if response == 'no':
                 return
@@ -267,13 +268,13 @@ class Application(Frame):
 
     def checkTraining(self):
 
-        response = tkMessageBox.askquestion('Train Machine', 'Are you sure you want to train the machine?')            
+        response = messagebox.askquestion('Train Machine', 'Are you sure you want to train the machine?')            
 
         if response == 'yes':
 
-            tkMessageBox.showwarning('Training', 'Training is currently unavailable.')
+            #messagebox.showwarning('Training', 'Training is currently unavailable.')
             
-            #self.startTraining()
+            self.startTraining()
             #self.machineTrained.set(1)
 
 
@@ -281,25 +282,87 @@ class Application(Frame):
 
         import threading
 
-        t = threading.Thread(None, self.trainMachine, ())
+        t = threading.Thread(None, self.trainComputer, ())
         t.start()
 
 
-    def trainMachine(self):
+    def trainComputer(self):
 
         self.progress_bar.start()
 
-        tkMessageBox.showinfo('Training', 'Training Complete. Reset game if needed')
+        for i in range(10):
+
+            continue_game = True
+            getX = True
+
+            while(continue_game):
+
+                # get the available selections
+                idx_options = self.getSelection()
+
+                # if there are more selections, get. else exit loop
+                if len(idx_options) > 0:
+                    if getX:
+                        self.randomX(idx_options)
+                        if self.checkWinner('X', False):
+                            continue_game = False
+                        getX = False
+                    else:
+                        self.randomO(idx_options)
+                        if self.checkWinner('O', False):
+                            continue_game = False
+                        getX = True
+                else:
+                    continue_game = False
+
+            for i in range(9):
+                self.buttonArray[i]['state'] = NORMAL
+                self.buttonArray[i]['text'] = ' '
+                self.buttonVar[i].set("")
+
+            self.winner.set(0)
+
+        messagebox.showinfo('Training', 'Training Complete.')
+
 
         self.progress_bar.stop()            
+    
+    def getSelection(self):
+
+        idx_options = []
+
+        for i in range(9):
+            if self.buttonVar[i].get() == 'S':
+                pass
+            else:
+                idx_options.append(i)
+
+        return idx_options
+
+    def randomX(self, idx_options):
+
+        idx_selection = random.choice(idx_options)
+
+        self.buttonArray[idx_selection]['text'] = 'X'
+        self.buttonVar[idx_selection].set("S")
+
+        time.sleep(1)
+
+    def randomO(self, idx_options):
+
+        idx_selection = random.choice(idx_options)
+
+        self.buttonArray[idx_selection]['text'] = 'O'
+        self.buttonVar[idx_selection].set("S")
         
+        time.sleep(1)
 
 root = Tk()
 root.title("TIC - TAC - TOE")
 
 # Set size
 
-wh = 450
+wh = 480
 ww = 300
 
 #root.resizable(height=False, width=False)
